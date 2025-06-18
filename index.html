@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polyatomic Ion Quiz</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; }
+    .quiz-box { max-width: 600px; margin: auto; border: 1px solid #ccc; padding: 20px; border-radius: 10px; }
+    button { margin-top: 10px; padding: 10px 20px; font-size: 16px; }
+    .option-btn { display: block; margin: 10px auto; width: 80%; }
+    .result { margin-top: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="quiz-box">
+    <h2>Polyatomic Ion Quiz</h2>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="result" class="result"></div>
+    <button onclick="loadQuestion()">Next Question</button>
+  </div>
+
+  <script>
+    const ions = [
+      ["Acetate", "C₂H₃O₂⁻"], ["Carbonate", "CO₃²⁻"], ["Hydrogen carbonate (bicarbonate)", "HCO₃⁻"],
+      ["Hydroxide", "OH⁻"], ["Nitrate", "NO₃⁻"], ["Nitrite", "NO₂⁻"],
+      ["Chromate", "CrO₄²⁻"], ["Dichromate", "Cr₂O₇²⁻"], ["Phosphate", "PO₄³⁻"],
+      ["Hydrogen phosphate", "HPO₄²⁻"], ["Ammonium", "NH₄⁺"], ["Hypochlorite", "ClO⁻"],
+      ["Chlorite", "ClO₂⁻"], ["Chlorate", "ClO₃⁻"], ["Perchlorate", "ClO₄⁻"],
+      ["Permanganate", "MnO₄⁻"], ["Sulfate", "SO₄²⁻"], ["Sulfite", "SO₃²⁻"],
+      ["Hydrogen sulfite (bisulfite)", "HSO₃⁻"], ["Hydrogen sulfate (bisulfate)", "HSO₄⁻"],
+      ["Peroxide", "O₂²⁻"], ["Cyanide", "CN⁻"]
+    ];
+
+    let correctAnswer = "";
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function loadQuestion() {
+      document.getElementById("result").textContent = "";
+      const [correctName, correctFormula] = ions[Math.floor(Math.random() * ions.length)];
+      correctAnswer = correctFormula;
+      const options = [correctFormula];
+
+      while (options.length < 4) {
+        const candidate = ions[Math.floor(Math.random() * ions.length)][1];
+        if (!options.includes(candidate)) options.push(candidate);
+      }
+
+      shuffle(options);
+
+      document.getElementById("question").innerHTML = What is the formula for: <strong>${correctName}</strong>?;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.className = "option-btn";
+        btn.onclick = () => checkAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const result = document.getElementById("result");
+      if (selected === correctAnswer) {
+        result.textContent = "✅ Correct!";
+        result.style.color = "green";
+      } else {
+        result.textContent = ❌ Incorrect. Correct answer: ${correctAnswer};
+        result.style.color = "red";
+      }
+    }
+
+    window.onload = loadQuestion;
+  </script>
+</body>
+</html>
